@@ -46,7 +46,7 @@
 
         #if str( $reference_source.reference_source_selector ) == "history"
             ln -s -f ${reference_source.ref_file} ${reference_source.ref_file}.fasta && rm -f ${reference_source.ref_file}.dict && rm -f ${reference_source.ref_file}.fai &&
-            java -Xmx12g -jar /usr/local/galaxy/galaxy/tools/gatk/picard.jar CreateSequenceDictionary R= ${reference_source.ref_file}.fasta O= ${reference_source.ref_file}.dict &&
+            java -Xmx12g -jar \$PICARD_PATH CreateSequenceDictionary R= ${reference_source.ref_file}.fasta O= ${reference_source.ref_file}.dict &&
             samtools faidx ${reference_source.ref_file}.fasta &&
         #end if
 

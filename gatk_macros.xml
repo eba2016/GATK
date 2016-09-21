@@ -8,7 +8,7 @@
     <token name="@OUTPUT_NAME_PREFIX@">${tool.name} - ${analysis_type.analysis_type_selector}</token>
     <token name="@GATK_EXEC@">
 <![CDATA[
-        java -Xmx29g -jar "/usr/local/galaxy/galaxy/tools/gatk/GenomeAnalysisTK.jar" \${THREAD_STRING:-}
+        java -Xmx29g -jar \$GATK_PATH_3_5  \${THREAD_STRING:-}
 ]]>
     </token>
 
