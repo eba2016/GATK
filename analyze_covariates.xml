@@ -1,0 +1,52 @@
+<macros>
+    <xml name="AnalyzeCovariatesParameters" tokens="tag">
+
+        <!-- BQSR in main config -->
+    <conditional name="cond_BQSR">
+      <param name="cond_BQSR_enabled" type="boolean" label="BQSR table" checked="true" />
+      <when value="true">
+
+        <param name="BQSR_table" type="data" format="tabular" label="Input BQSR table file" help="-BQSR,‑‑BQSR &amp;lt;BQSR&amp;gt; intended primarily for use with BaseRecalibrator and PrintReads"/>
+
+      </when>
+      <when value="false" >
+        <param name="afterReportFile" type="data" format="tabular" optional="true" label="file containing the BQSR second-pass report file" help="-after,&#8209;&#8209;afterReportFile &amp;lt;afterReportFile&amp;gt;" />
+
+        <param name="beforeReportFile" type="data" format="tabular" optional="true" label="file containing the BQSR first-pass report file" help="-before,&#8209;&#8209;beforeReportFile &amp;lt;beforeReportFile&amp;gt;" />
+      </when>
+
+    </conditional>
+
+    </xml>
+
+    <xml name="AnalyzeCovariatesOutput">
+        <data format="pdf" name="ac_plotsReportFile" label="${tool.name} - ${analysis_type.analysis_type_selector} on ${on_string} (PDF Recalibration Report)">
+            <yield />
+        </data>
+    </xml>
+
+    <template name="AnalyzeCovariatesPreprocessing">
+<![CDATA[
+]]>
+    </template>
+
+    <template name="AnalyzeCovariatesOptions">
+<![CDATA[
+
+        #if $analysis_type.cond_BQSR.cond_BQSR_enabled
+          --BQSR $cond_BQSR.BQSR
+        #end if
+
+        --plotsReportFile                   ${ac_plotsReportFile}
+
+        #if str($analysis_type.cond_BQSR.afterReportFile)
+            --afterReportFile $cond_BQSR.afterReportFile
+        #end if
+        #if str($analysis_type.cond_BQSR.beforeReportFile)
+            --beforeReportFile $cond_BQSR.beforeReportFile
+        #end if
+]]>
+    </template>
+</macros>
+
+

@@ -1,0 +1,49 @@
+<macros>
+    <xml name="RealignerTargetCreatorParameters" tokens="tag">
+        
+        <expand macro="macro_bam_input" tag="@TAG@" />
+
+        <conditional name="cond_knownSites">
+          <param name="cond_knownSites_enabled" type="boolean" label="Select database of known sites?"/>
+          <when value="true">
+            <param name="knownSites" type="data" format="vcf,bcf,bed,pileup,tabular,table" label="Database of known Sites (ROD files; e.g. VCF format)" multiple="true" title="A database of known polymorphic sites to skip over in the recalibration algorithm" help="-known,&#8209;&#8209;known &amp;lt;known&amp;gt;" />
+          </when>
+          <when value="false"/>
+        </conditional>
+        
+    </xml>
+
+    <xml name="RealignerTargetCreatorOutput">
+        <data format="gatk_interval" name="rtc_output_intervals" label="${tool.name} - ${analysis_type.analysis_type_selector} on ${on_string} (GATK intervals)">
+            <yield />
+        </data>
+    </xml>
+
+    <template name="RealignerTargetCreatorPreprocessing">
+<![CDATA[
+        @token_bam_input_pre@
+
+        #if $analysis_type.cond_knownSites.cond_knownSites_enabled
+            #for $i, $variant in enumerate($analysis_type.cond_knownSites.knownSites):
+                ln -s -f ${variant} variant_${i}.vcf &&
+            #end for
+        #end if
+]]>
+    </template>
+
+    <template name="RealignerTargetCreatorOptions">
+<![CDATA[
+        --out                   ${rtc_output_intervals}
+
+        @token_bam_input@
+
+        #if $analysis_type.cond_knownSites.cond_knownSites_enabled
+            #for $i, $variant in enumerate($analysis_type.cond_knownSites.knownSites):
+                --known variant_${i}.vcf
+            #end for
+        #end if
+]]>
+    </template>
+</macros>
+
+

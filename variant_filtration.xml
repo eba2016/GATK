@@ -1,0 +1,86 @@
+<macros>
+    <xml name="VariantFiltrationParameters" tokens="tag">
+        
+        <expand macro="macro_vcf_input" tag="@TAG@" />
+
+        <param name="mask" type="data" format="vcf,bcf,bed,pileup,tabular,table" optional="true" label="Input ROD mask" help="-mask,&#8209;&#8209;mask &amp;lt;mask&amp;gt;" />
+
+        <expand macro="macro_optional_parameters">
+
+            <param name="clusterSize" type="integer" value="3" optional="true" label="The number of SNPs which make up a cluster" help="-cluster,&#8209;&#8209;clusterSize &amp;lt;clusterSize&amp;gt;" />
+            <param name="clusterWindowSize" type="integer" value="0" optional="true" label="The window size (in bases) in which to evaluate clustered SNPs" help="-window,&#8209;&#8209;clusterWindowSize &amp;lt;clusterWindowSize&amp;gt;" />
+            <param name="filterExpression" type="text" value="" optional="true" label="One or more expressions used with INFO fields to filter. Use ';' between expression, example: QUAL&amp;lt;20;MQ&amp;lt;15" help="-filter,&#8209;&#8209;filterExpression &amp;lt;filterExpression&amp;gt;" />
+            <param name="filterName" type="text" value="" optional="true" label="Names to use for the list of filters. Use ';' between expression, example: Quality;Mapping" help="-filterName,&#8209;&#8209;filterName &amp;lt;filterName&amp;gt;" />
+            <param name="genotypeFilterExpression" type="text" value="" optional="true" label="One or more expression used with FORMAT (sample/genotype-level) fields to filter (see documentation guide for more info). Use ';' between expression." help="-G_filter,&#8209;&#8209;genotypeFilterExpression &amp;lt;genotypeFilterExpression&amp;gt;" />
+            <param name="genotypeFilterName" type="text" value="" optional="true" label="Names to use for the list of sample/genotype filters (must be a 1-to-1 mapping); this name is put in the FILTER field for variants that get filtered. Use ';' between expression." help="-G_filterName,&#8209;&#8209;genotypeFilterName &amp;lt;genotypeFilterName&amp;gt;" />
+            <param name="maskExtension" type="integer" value="0" optional="true" label="How many bases beyond records from a provided 'mask' rod should variants be filtered" help="-maskExtend,&#8209;&#8209;maskExtension &amp;lt;maskExtension&amp;gt;" />
+            <param name="maskName" type="text" value="" optional="true" label="The text to put in the FILTER field if a 'mask' rod is provided and overlaps with a variant call" help="-maskName,&#8209;&#8209;maskName &amp;lt;maskName&amp;gt;" />
+
+        </expand>
+
+    </xml>
+
+    <xml name="VariantFiltrationOutput">
+        <data format="vcf" name="vf_output_vcf" label="${tool.name} - ${analysis_type.analysis_type_selector} on ${on_string} (VCF)">
+            <yield />
+        </data>
+    </xml>
+
+    <template name="VariantFiltrationPreprocessing">
+<![CDATA[
+        @token_vcf_input_pre@
+]]>
+    </template>
+
+    <template name="VariantFiltrationOptions">
+<![CDATA[
+        --out ${vf_output_vcf}
+
+        @token_vcf_input@
+
+        #if $analysis_type.mask
+            --mask $analysis_type.mask
+        #end if
+
+        #set $optionals = $analysis_type.optional_parameters
+        #if $optionals.optional_parameters_enabled
+            #if $optionals.clusterSize != 3
+                --clusterSize $optionals.clusterSize
+            #end if
+            #if $optionals.clusterWindowSize != 0
+                --clusterWindowSize $optionals.clusterWindowSize
+            #end if
+            #if $optionals.filterExpression
+                #for $filterExp in $optionals.filterExpression.split(';')
+                    --filterExpression "$filterExp"
+                #end for
+            #end if
+            #if $optionals.filterName
+                #for $filterName in $optionals.filterName.split(';')
+                    --filterName "$filterName"
+                #end for
+            #end if
+            #if $optionals.genotypeFilterExpression
+                #for $genoFilterExp in $optionals.genotypeFilterExpression.split(';')
+                    --genotypeFilterExpression "$genoFilterExp"
+                #end for
+            #end if
+            #if $optionals.genotypeFilterName
+                #for $genoFilterName in $optionals.genotypeFilterName.split(';')
+                    --genotypeFilterName "$genoFilterName"
+                #end for
+            #end if
+            #if $optionals.maskExtension != 0
+                --maskExtension $optionals.maskExtension
+            #end if
+            #if $optionals.maskName
+                --maskName $optionals.maskName
+            #end if
+        #end if
+]]>
+    </template>
+
+
+</macros>
+
+

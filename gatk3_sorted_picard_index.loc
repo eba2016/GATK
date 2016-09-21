@@ -1,0 +1,33 @@
+#This is a sample file distributed with Galaxy that enables tools
+#to use a directory of Picard dict and associated files. You will need
+#to create these data files and then create a picard_index.loc file 
+#similar to this one (store it in this directory) that points to 
+#the directories in which those files are stored. The picard_index.loc 
+#file has this format (longer white space is the TAB character):
+#
+#<unique_build_id>	<dbkey>		<display_name>		<fasta_file_path>
+#
+#So, for example, if you had hg18 indexed and stored in 
+#/depot/data2/galaxy/srma/hg18/,
+#then the srma_index.loc entry would look like this:
+#
+#hg18	hg18	hg18 Pretty		/depot/data2/galaxy/picard/hg18/hg18.fa
+#
+#and your /depot/data2/galaxy/srma/hg18/ directory
+#would contain the following three files:
+#hg18.fa
+#hg18.dict
+#hg18.fa.fai
+#
+#The dictionary file for each reference (ex. hg18.dict) must be 
+#created via Picard (http://picard.sourceforge.net). Note that
+#the dict file does not have the .fa extension although the
+#path list in the loc file does include it.
+#
+/data/annotations/Galaxy/Human/hg19/gatk/hg19.fasta	hg19	hg19	/data/annotations/Galaxy/Human/hg19/gatk/hg19.fasta
+/data/annotations/Galaxy/Yeast/S288c/gatk/S288C_20110203.fasta	S288c	s288c	/data/annotations/Galaxy/Yeast/S288c/gatk/S288C_20110203.fasta
+/data/annotations/Galaxy/Yeast/SK1/gatk/SK1_20080221.fasta	SK1_2008	SK1_2008	/data/annotations/Galaxy/Yeast/SK1/gatk/SK1_20080221.fasta
+/data/annotations/Galaxy/Yeast/SK1_MvO/gatk/SK1_MvO.fasta	SK1_MvO	SK1_MvO	/data/annotations/Galaxy/Yeast/SK1_MvO/gatk/SK1_MvO.fasta
+/data/annotations/Galaxy/Mouse/mm9/gatk/mm9.fa	mm9	mm9	/data/annotations/Galaxy/Mouse/mm9/gatk/mm9.fa
+/data/annotations/Galaxy/Mouse/mm10/gatk/mm10.fa	mm10	mm10	/data/annotations/Galaxy/Mouse/mm10/gatk/mm10.fa
+/data/annotations/Galaxy/XLaevis/7.1/Xlaevis_7.1.fa	XLaevis	XLaevis	/data/annotations/Galaxy/XLaevis/7.1/Xlaevis_7.1.fa
