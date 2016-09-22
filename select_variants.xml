@@ -46,10 +46,10 @@
                     -select "$selectExp"
                 #end for
             #end if
-            #if $optionals.excludeFiltered == 'true'
+            #if $optionals.excludeFiltered
                 --excludeFiltered
             #end if
-            #if $optionals.excludeNonVariants == 'true'
+            #if $optionals.excludeNonVariants
                 --excludeNonVariants
             #end if
             #if $optionals.selectTypeToExclude
